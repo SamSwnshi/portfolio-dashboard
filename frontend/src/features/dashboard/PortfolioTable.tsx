@@ -6,6 +6,8 @@ interface Props {
 }
 
 const PortfolioTable: React.FC<Props> = ({ data }) => {
+  const totalInvestment = data.reduce((sum, stock) => sum + stock.investment, 0);
+
   return (
     <div className="overflow-x-auto rounded-lg shadow-lg border border-gray-700">
       <table className="w-full border-collapse text-sm">
@@ -25,32 +27,47 @@ const PortfolioTable: React.FC<Props> = ({ data }) => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-700 bg-gray-900 text-gray-100">
-          {data.map((stock, idx) => (
-            <tr
-              key={idx}
-              className="hover:bg-gray-800 transition-colors duration-150"
-            >
-              <td className="px-4 py-2">{stock.name ?? stock.symbol}</td>
-              <td className="px-4 py-2 text-right">{stock.purchasePrice.toFixed(2)}</td>
-              <td className="px-4 py-2 text-right">{stock.qty}</td>
-              <td className="px-4 py-2 text-right">{stock.investment.toFixed(2)}</td>
-              <td className="px-4 py-2 text-right">{stock.portfolioPercent?.toFixed(2)}%</td>
-              <td className="px-4 py-2 text-center">{stock.exchange ?? "N/A"}</td>
-              <td className="px-4 py-2 text-right">{stock.cmp?.toFixed(2) ?? "N/A"}</td>
-              <td className="px-4 py-2 text-right">{stock.presentValue?.toFixed(2) ?? "N/A"}</td>
-              <td
-                className={`px-4 py-2 text-right font-semibold ${
-                  (stock.gainLoss ?? 0) >= 0
-                    ? "text-green-400"
-                    : "text-red-400"
-                }`}
+          {data.map((stock, idx) => {
+            const portfolioPercent =
+              totalInvestment > 0
+                ? (stock.investment / totalInvestment) * 100
+                : 0;
+
+            return (
+              <tr
+                key={idx}
+                className="hover:bg-gray-800 transition-colors duration-150"
               >
-                {stock.gainLoss?.toFixed(2) ?? "N/A"}
-              </td>
-              <td className="px-4 py-2 text-right">{stock.peRatio ?? "N/A"}</td>
-              <td className="px-4 py-2 text-right">{stock.latestEarnings ?? "N/A"}</td>
-            </tr>
-          ))}
+                <td className="px-4 py-2">{stock.name ?? stock.symbol}</td>
+                <td className="px-4 py-2 text-right">{stock.purchasePrice}</td>
+                <td className="px-4 py-2 text-right">{stock.qty}</td>
+                <td className="px-4 py-2 text-right">{stock.investment.toFixed(2)}</td>
+                <td className="px-4 py-2 text-right">
+                  {portfolioPercent.toFixed(2)}%
+                </td>
+                <td className="px-4 py-2 text-center">{stock.exchange ?? "N/A"}</td>
+                <td className="px-4 py-2 text-right">
+                  {stock.cmp != null ? stock.cmp.toFixed(2) : "N/A"}
+                </td>
+                <td className="px-4 py-2 text-right">
+                  {stock.presentValue.toFixed(2)}
+                </td>
+                <td
+                  className={`px-4 py-2 text-right font-semibold ${
+                    stock.gainLoss >= 0 ? "text-green-400" : "text-red-400"
+                  }`}
+                >
+                  {stock.gainLoss.toFixed(2)}
+                </td>
+                <td className="px-4 py-2 text-right">
+                  {stock.peRatio != null ? stock.peRatio.toFixed(2) : "N/A"}
+                </td>
+                <td className="px-4 py-2 text-right">
+                  {stock.earnings ?? "N/A"}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <p className="text-xs text-gray-500 p-2">

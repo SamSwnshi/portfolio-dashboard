@@ -15,7 +15,8 @@ const DashboardPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        let interval: NodeJS.Timeout;
+        let interval: ReturnType<typeof setInterval>;
+
         const fetchData = async () => {
             try {
                 const portfolio = await fetchPortfolio();

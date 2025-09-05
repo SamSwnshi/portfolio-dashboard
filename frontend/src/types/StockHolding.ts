@@ -3,12 +3,15 @@ export interface StockHolding {
   name: string;
   sector: string;
   qty: number;
-  price: number;
+  purchasePrice: number;
   exchange: string;
-  cmp?: number | null;
+  cmp?: number | null; 
   peRatio?: number | null;
-  earnings?: string | null;
+  earnings?: string | null; 
   investment: number;
   presentValue: number;
   gainLoss: number;
+
+
+  portfolioPercent?: number;
 }
