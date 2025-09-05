@@ -16,6 +16,6 @@ export async function fetchPortfolio(): Promise<PortfolioResponse> {
     throw new Error("Failed to fetch portfolio");
   }
   const data: PortfolioResponse = await response.json();
-  console.log(data)
+  // console.log(data)
   return data;
 }
